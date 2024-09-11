@@ -1,28 +1,66 @@
 import { Image, Pressable, SafeAreaView, ScrollView, StatusBar, StyleSheet, Text, View } from 'react-native'
-import React, { useState } from 'react'
+import React, { useContext, useRef, useState } from 'react'
 import Poppins, { PoppinsBold, PoppinsExtraBold } from '../components/fonts'
 import Input from '../components/Input'
 import signUpData from '../assets/data/signUp.data'
 import Button from '../components/Button'
+import POSTRegister from '../apis/Auth'
+import { AppContext } from '../context/AppContext'
+import FlashMessage from 'react-native-flash-message'
+import showToast from '../components/Toast'
 
 
 const SignUp = ({navigation}) => {
-  const [checked, setChecked] = useState(false)
+  const [user, setUser] = useState({})
+  const { setCurrentUser } = useContext(AppContext)
+  const flashMessageRef = useRef();
+
+
+  const handleSignUp = async ()=>{
+    try{
+      console.log('====================================');
+      console.log("User", user);
+      console.log('====================================');
+      if(user.name == undefined || user.phone==undefined || user.password==undefined){
+        throw new Error("Enter All fields")
+      }
+      const result = await POSTRegister(user);
+
+      console.log('====================================');
+      console.log("POST REgister ", result);
+      console.log('====================================');
+      setCurrentUser(result.data)
+      showToast("Successfully Signed Up", "#63c991", "#63c991", flashMessageRef, -20)
+
+      setTimeout(()=>navigation.navigate("Home"),1500)
+
+    }catch(e){
+      console.log(e);
+      showToast(e.message, "#e44f26", "#e44f26", flashMessageRef, -20)
+    }
+  }
 
   return (
     <SafeAreaView style={{flex: 1, backgroundColor: "#FFFFFF", paddingLeft: 30}}>
       <StatusBar backgroundColor="transparent" translucent={true} barStyle="dark-content" />
       <ScrollView>
+        <FlashMessage ref={flashMessageRef} />
         <Image source={require('../assets/images/logo.png')} alt="logo" style={styles.image} />
         <PoppinsExtraBold text={"Sign Up"} style={{fontSize: 32, color: "black"}} />
         <Poppins text={"Fill in the below form and add life to your car!"} style={{width: "75%", fontSize: 16, color: "#0000006B", fontWeight: "500", marginBottom: 15}} />
         {
           signUpData?.map((ele)=>{
-            return(
+            return (
               <View key={ele?.id}>
-                <Input title={ele?.title} image={ele?.image} placeholder={ele?.placeholder} />
+                <Input
+                  title={ele?.title}
+                  image={ele?.image}
+                  placeholder={ele?.placeholder}
+                  user={user}
+                  setUser={setUser}
+                />
               </View>
-            )
+            );
           })
         }
         <View style={{flexDirection: "row", marginVertical: 18}}>
@@ -31,7 +69,7 @@ const SignUp = ({navigation}) => {
           <PoppinsBold text={"Terms & Conditions"} style={{color: "gray", textDecorationLine: 'underline'}} />
         </View>
 
-        <Button title={"Sign Up"} onPress={()=>{}} />
+        <Button title={"Sign Up"} onPress={()=>handleSignUp()} />
 
 
         <View style={{flexDirection: "row", marginTop: 25, alignSelf: "center"}}>

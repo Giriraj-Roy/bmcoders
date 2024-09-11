@@ -1,18 +1,52 @@
 import { Image, Pressable, SafeAreaView, ScrollView, StatusBar, StyleSheet, Text, View } from 'react-native'
-import React from 'react'
+import React, { useContext, useRef, useState } from 'react'
 import Poppins, { PoppinsBold, PoppinsExtraBold } from '../components/fonts'
 import Input from '../components/Input'
 import signUpData from '../assets/data/signUp.data'
 import Button from '../components/Button'
+import { POSTLogin } from '../apis/Auth'
+import { AppContext } from '../context/AppContext'
+import FlashMessage from 'react-native-flash-message'
+import showToast from '../components/Toast'
 
 
 const SignIn = ({navigation}) => {
+  const [user, setUser] = useState({})
+  const context = useContext(AppContext)
+  const flashMessageRef = useRef();
+
+
+  const handleSignIn = async ()=>{
+    try{
+
+      if(user.phone==undefined || user.password==undefined){
+        throw new Error("Enter All fields")
+      }
+      const result = await POSTLogin(user);
+
+      console.log('====================================');
+      console.log("POST Login ", result);
+      console.log('====================================');
+      if(result.status==false){
+        throw new Error(result.message)
+      }
+      context?.setCurrentUser(result.data)
+      showToast("Successfully Logged In", "#63c991", "#63c991", flashMessageRef, -20)
+
+      setTimeout(()=>navigation.navigate("Home"),1500)
+
+    }catch(e){
+      console.log(e.message);
+      showToast(e.message, "#e44f26", "#e44f26", flashMessageRef, -20)
+    }
+  }
 
   return (
     <SafeAreaView style={{flex: 1, backgroundColor: "#FFFFFF", alignItems:"center"}}>
       <StatusBar backgroundColor="transparent" translucent={true} barStyle="dark-content" />
       <ScrollView>
         <View style={{width: "100%", marginLeft: 15}}>
+          <FlashMessage ref={flashMessageRef} />
           <Image source={require('../assets/images/logo.png')} alt="logo" style={styles.image} />
           <PoppinsExtraBold text={"Sign In"} style={{fontSize: 32, color: "black"}} />
           <Poppins text={"Hi ! Welcome back, you have been missed"} style={{width: "50%", fontSize: 16, color: "#0000006B", fontWeight: "500"}} />
@@ -21,7 +55,7 @@ const SignIn = ({navigation}) => {
               return(
                 ele.id!=1 &&
                 <View key={ele?.id}>
-                  <Input title={ele?.title} image={ele?.image} placeholder={ele?.placeholder} />
+                  <Input user={user} setUser={setUser} title={ele?.title} image={ele?.image} placeholder={ele?.placeholder} />
                 </View>
               )
             })
@@ -30,7 +64,7 @@ const SignIn = ({navigation}) => {
             <PoppinsBold text={"Forgot Password? "} style={{color: "black", textDecorationLine: 'underline'}} />
           </View>
 
-          <Button title={"Sign In"} onPress={()=>{navigation.navigate("Home")}} />
+          <Button title={"Sign In"} onPress={()=>handleSignIn()} />
 
         </View>
 

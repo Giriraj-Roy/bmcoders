@@ -7,8 +7,8 @@ const signUpData = [
     },
     {
         id: 2,
-        title : "Email",
-        placeholder: "xyz@gmail.com ",
+        title : "Phone",
+        placeholder: "XXX-XXX-XXXX",
         image : require('../images/mail.png')
     },
     {

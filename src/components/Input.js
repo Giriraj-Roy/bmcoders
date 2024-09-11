@@ -2,7 +2,7 @@ import { Image, StyleSheet, Text, TextInput, View } from 'react-native'
 import React, { useState } from 'react'
 import Poppins from './fonts'
 
-const Input = ({title, placeholder, image}) => {
+const Input = ({title, placeholder, image, user, setUser}) => {
     const [inputVal, setInputVal] = useState('')
   return (
     <View style={{marginVertical: 4}}>
@@ -12,6 +12,9 @@ const Input = ({title, placeholder, image}) => {
         <TextInput
             value={inputVal}
             onChangeText={(e)=>setInputVal(e)}
+            onEndEditing={(e)=>{
+              setUser({...user, [title.toLowerCase()] : e.nativeEvent.text })
+            }}
             placeholder={placeholder}
             placeholderTextColor={"gray"}
             secureTextEntry={title.toLowerCase()==='password'}
