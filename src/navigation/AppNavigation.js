@@ -6,6 +6,7 @@ import Splash from '../pages/Splash'
 import SignUp from '../pages/SignUp'
 import Start from '../pages/Start'
 import SignIn from '../pages/SignIn'
+import Home from '../pages/Home'
 
 const Stack = createStackNavigator()
 const AppNavigation = () => {
@@ -15,13 +16,11 @@ const AppNavigation = () => {
     <NavigationContainer>
         <Stack.Navigator initialRouteName="Splash">
             <Stack.Screen name="Splash" component={Splash} options={{headerShown : false}}/>
+            <Stack.Screen name="Home" component={Home} options={{headerShown : false}}/>
             <Stack.Screen name="SignUp" component={SignUp} options={{headerShown : false}}/>
             <Stack.Screen name="SignIn" component={SignIn} options={{headerShown : false}}/>
             <Stack.Screen name="Start" component={Start} options={{headerShown : false}}/>
-
-
         </Stack.Navigator>
-
     </NavigationContainer>
   )
 }

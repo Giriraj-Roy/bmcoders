@@ -1,17 +1,21 @@
-import { Image, SafeAreaView, ScrollView, StatusBar, StyleSheet, Text, View } from 'react-native'
-import React from 'react'
-import Poppins, { PoppinsExtraBold } from '../components/fonts'
+import { Image, Pressable, SafeAreaView, ScrollView, StatusBar, StyleSheet, Text, View } from 'react-native'
+import React, { useState } from 'react'
+import Poppins, { PoppinsBold, PoppinsExtraBold } from '../components/fonts'
 import Input from '../components/Input'
 import signUpData from '../assets/data/signUp.data'
+import Button from '../components/Button'
 
-const SignUp = () => {
+
+const SignUp = ({navigation}) => {
+  const [checked, setChecked] = useState(false)
+
   return (
-    <SafeAreaView style={{flex: 1, backgroundColor: "#FFFFFF", paddingLeft: 20}}>
+    <SafeAreaView style={{flex: 1, backgroundColor: "#FFFFFF", paddingLeft: 30}}>
       <StatusBar backgroundColor="transparent" translucent={true} barStyle="dark-content" />
       <ScrollView>
         <Image source={require('../assets/images/logo.png')} alt="logo" style={styles.image} />
         <PoppinsExtraBold text={"Sign Up"} style={{fontSize: 32, color: "black"}} />
-        <Poppins text={"Fill in the below form and add life to your car!"} style={{width: "75%", fontSize: 16, color: "#0000006B", fontWeight: "500"}} />
+        <Poppins text={"Fill in the below form and add life to your car!"} style={{width: "75%", fontSize: 16, color: "#0000006B", fontWeight: "500", marginBottom: 15}} />
         {
           signUpData?.map((ele)=>{
             return(
@@ -21,7 +25,28 @@ const SignUp = () => {
             )
           })
         }
+        <View style={{flexDirection: "row", marginVertical: 18}}>
+          <View style={{width: 20, height: 20, borderWidth: 1, borderRadius: 4, marginHorizontal: 8}} />
+          <PoppinsBold text={"Agree with "} style={{color: "black"}} />
+          <PoppinsBold text={"Terms & Conditions"} style={{color: "gray", textDecorationLine: 'underline'}} />
+        </View>
+
+        <Button title={"Sign Up"} onPress={()=>{}} />
+
+
+        <View style={{flexDirection: "row", marginTop: 25, alignSelf: "center"}}>
+          <Poppins text={"Already have an account?  "} style={{fontSize: 14, fontWeight: "700", color: "#808080"}} />
+          <Pressable onPress={()=>navigation.navigate("SignIn")}>
+            <Poppins text={"Sign in"} style={{fontSize: 14, fontWeight: "700", color: "#000000B2", textDecorationLine: 'underline'}} />
+          </Pressable>
+          
+        </View>
+        <Poppins
+            text={"By login or sign up, you agree to our terms of use and privacy policy"}
+            style={{fontSize: 14, color: "#808080", textAlign: "center", marginTop: 20}} 
+        />
       </ScrollView>
+      <Image source={require("../assets/images/mask.png")} style={{position: "absolute", bottom: 0, right:0, zIndex: -1}} />
     </SafeAreaView>
   )
 }

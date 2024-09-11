@@ -12,6 +12,8 @@ const Input = ({title, placeholder, image}) => {
         <TextInput
             value={inputVal}
             onChangeText={(e)=>setInputVal(e)}
+            placeholder={placeholder}
+            placeholderTextColor={"gray"}
             secureTextEntry={title.toLowerCase()==='password'}
             style={styles.input}
         />

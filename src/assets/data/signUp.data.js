@@ -12,7 +12,7 @@ const signUpData = [
         image : require('../images/mail.png')
     },
     {
-        id: 1,
+        id: 3,
         title : "Password",
         placeholder: "password",
         image : require('../images/lock.png')

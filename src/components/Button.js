@@ -2,9 +2,9 @@ import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import React from 'react';
 import {Inter} from './fonts';
 
-const Button = ({onPress, title, textStyle}) => {
+const Button = ({onPress, title, textStyle, style}) => {
   return (
-    <TouchableOpacity onPress={onPress} style={styles.button}>
+    <TouchableOpacity onPress={onPress} style={[styles.button, style]}>
       <Inter text={title} style={[styles.text, textStyle]} />
     </TouchableOpacity>
   );
